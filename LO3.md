@@ -25,6 +25,8 @@ O/P:
 **4)Enumerate GPO applied on the DevOpsOU**
 
 First we need to list the OU's present,, in that we can find the DevOpsOU, under it there will be a attribute called "gplink" take that value 
+
+gplink-group policy link
 ![alt text](image-4.png)
 
 Now we can find the GPO linked to the DevOps OU
@@ -63,6 +65,7 @@ Use bloodhound for this task and see the inbound and outbound object control of 
 in our attacking perspective we see who are all contains the write/genericall like permissions on these Policies so that we can abuse them
 
 Based on the observation interesting things are:
+
 i)RDPusers group has GenericAll/fullcontrol,GenericWrite over the applocker policy we can abuse it
 ![alt text](image-5.png)
 ii)DEVOPSADMIN group has GenericWrite,WriteDacl and WriteOwner permission on the DevOps policy
