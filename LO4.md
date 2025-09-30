@@ -22,7 +22,7 @@ command:
 ```  Get-DomainTrust -Domain dollarcorp.moneycorp.local | ? {$_.TrustAttributes -eq "Filter_SIDS"}```
 
 O/P:
-it shows that thew external trust is with the eurocorp.local domain
+it shows that the external trust is with the eurocorp.local domain
 
 # **4)Identify the external trust of dollarcorp domain. Can you enumerate trust for the trusting forest?**
 
@@ -36,4 +36,4 @@ O/P:
 ![alt text](image-9.png)
 
 so we try to enumerate the trust for the domains[eurocorp.local and eu.eurocorp.local] in the eurocorp.local forest
-As per the output we are able to enumerate the trusts of the eurocorp.local forest only,,, when trying to enumerate the trusts of the eu.eurocorp.local forest it throws error because the two way non transitive [external trust] exists between the dollarcorp and eurocorp domain,, so we will no be able to enumerate the trust of the eu.eurocorp domain from the dollarcorp domain!
+As per the output we are able to enumerate the trusts of the eurocorp.local forest only,,, when trying to enumerate the trusts of the eu.eurocorp.local forest it throws error because of the two way non transitive [external trust] exists between the dollarcorp and eurocorp domain,, so we will no be able to enumerate the trust of the eu.eurocorp domain from the dollarcorp domain!
